@@ -1,48 +1,63 @@
-{{define "content"}}
-<section class="hero">
-  <h1>{{.Site.Tagline}}</h1>
-  <p><strong>{{.Site.Slogan}}</strong></p>
-  <p>{{.Site.Who}}</p>
-  <p class="actions"><a class="btn" href="/courses">Explore Courses</a> <a class="btn btn-ghost" href="/apply">Apply Now</a></p>
-</section>
+{{ define "content" }}
+    <!-- Hero Section -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="inline-block bg-teal-50 text-brand-secondary font-bold text-xs px-4 py-1.5 rounded-full mb-6 border border-teal-100">
+                    {{ .Site.Slogan }}
+                </div>
+                <h1 class="text-5xl lg:text-6xl font-extrabold leading-tight mb-6 text-gray-900">
+                    Empowering the Next Generation Through <span class="text-brand-primary relative inline-block">AI & Tech
+                        <span class="absolute bottom-1 left-0 w-full h-3 bg-teal-200 -z-10 rounded-sm opacity-60"></span>
+                    </span>
+                </h1>
+                <p class="text-gray-500 text-lg mb-8 max-w-lg leading-relaxed">
+                    {{ .Site.Tagline }}. {{ .Site.Who }}
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center gap-4 mb-12">
+                    <a href="/courses" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-brand-primary hover:bg-indigo-700 transition-colors shadow-xl shadow-indigo-200">
+                        Explore Courses
+                    </a>
+                    <a href="/apply" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 border-2 border-gray-200 text-base font-bold rounded-full text-gray-700 hover:bg-gray-50 transition-colors">
+                        Register Now
+                    </a>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute inset-0 bg-indigo-100 rounded-[3rem] transform -rotate-3 scale-105 -z-10"></div>
+                <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800&auto=format&fit=crop" alt="NexGen Students" class="w-full h-[500px] object-cover rounded-[3rem] shadow-2xl">
+            </div>
+        </div>
+    </section>
 
-<section>
-  <h2>Why Choose Us</h2>
-  <ul class="ticks">
-    {{range .Site.WhyUs}}<li>{{.}}</li>{{end}}
-  </ul>
-</section>
+    <!-- Why Choose Us (Using .Site.WhyUs loop) -->
+    <div class="bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                {{ range .Site.WhyUs }}
+                <div class="flex flex-col items-center">
+                    <svg class="w-8 h-8 text-brand-primary mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="font-bold text-gray-800">{{ . }}</span>
+                </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
 
-<section>
-  <h2>Our 7 Courses</h2>
-  <ol class="course-list">
-    {{range .Courses}}
-    <li><span class="title">{{.Title}}</span> <a class="price-link" href="{{.EnquireURL}}">{{$.Site.PriceLabel}}</a></li>
-    {{end}}
-  </ol>
-</section>
-
-<section>
-  <h2>How We Deliver</h2>
-  <ul class="chips">
-    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
-  </ul>
-</section>
-
-{{if .Site.Testimonials}}
-<section>
-  <h2>What Our Students Say</h2>
-  {{range .Site.Testimonials}}
-  <blockquote>
-    <p>{{.Quote}}</p>
-    <footer>{{.Name}}, {{.Course}}</footer>
-  </blockquote>
-  {{end}}
-</section>
-{{end}}
-
-<section class="cta-band">
-  <h2>Ready to start?</h2>
-  <p class="actions"><a class="btn" href="/apply">Apply / Register</a> <a class="btn btn-ghost" href="/contact">Contact us</a></p>
-</section>
-{{end}}
+    <!-- Course Preview List -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Our Core Courses</h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {{ range .Site.Courses }}
+            <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300 group">
+                <div class="text-brand-secondary font-bold text-sm mb-2">Course {{ .Num }}</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ .Title }}</h3>
+                <a href="{{ .EnquireURL }}" class="text-brand-primary font-semibold hover:underline mt-4 inline-block">Enquire &rarr;</a>
+            </div>
+            {{ end }}
+        </div>
+    </section>
+{{ end }}

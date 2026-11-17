@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes" // <--- ADDED THIS
 	"html/template"
 	"log"
 	"net/http"
@@ -51,6 +52,7 @@ func loadPages() {
 	}
 }
 
+// UPDATED render function to catch template errors
 func render(w http.ResponseWriter, name string, status int, d pageData) {
 	t, ok := pages[name]
 	if !ok {
@@ -59,11 +61,18 @@ func render(w http.ResponseWriter, name string, status int, d pageData) {
 	}
 	d.Site = site
 	d.Courses = site.Courses
+	
+	// Use a buffer to catch template execution errors before sending headers
+	var buf bytes.Buffer
+	if err := t.ExecuteTemplate(&buf, "layout", d); err != nil {
+		log.Println("render error:", err)
+		http.Error(w, "Internal Server Error: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(status)
-	if err := t.ExecuteTemplate(w, "layout", d); err != nil {
-		log.Println("render:", err)
-	}
+	buf.WriteTo(w)
 }
 
 // ---------- simple pages ----------
@@ -83,6 +92,7 @@ func SchoolHandler(w http.ResponseWriter, r *http.Request) {
 func TestimonialHandler(w http.ResponseWriter, r *http.Request) {
 	render(w, "testimonials", http.StatusOK, pageData{Title: "Testimonials"})
 }
+
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
 	render(w, "contact", http.StatusOK, pageData{
 		Title: "Contact",
@@ -180,6 +190,56 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 // ---------- contact ----------
 
 func ContactSubmitHandler(w http.ResponseWriter, r *http.Request) {
-	// same pattern as ApplySubmitHandler: parse, validate, saveMessage(r.Context(), ContactMessage{...}), redirect
-	http.Redirect(w, r, "/contact?sent=1", http.StatusSeeOther)
+	r.Body = http.MaxBytesReader(w, r.Body, 1<<16)
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	form := map[string]string{}
+	for _, k := range []string{"name", "email", "phone", "interest", "message"} {
+		form[k] = strings.TrimSpace(r.PostFormValue(k))
+	}
+
+	errs := map[string]string{}
+	if form["name"] == "" || len(form["name"]) > 100 {
+		errs["name"] = "Enter your full name."
+	}
+	if form["message"] == "" {
+		errs["message"] = "Please enter a message."
+	}
+	// If they provided a phone number, make sure it's valid
+	if form["phone"] != "" {
+		phone, ok := normalizePhone(form["phone"])
+		if !ok {
+			errs["phone"] = "Enter a valid Nigerian phone number or leave blank."
+		} else {
+			form["phone"] = phone
+		}
+	}
+	// If they provided an email, do a basic length check
+	if form["email"] != "" && len(form["email"]) > 150 {
+		errs["email"] = "Email address is too long."
+	}
+
+	if len(errs) > 0 {
+		render(w, "contact", http.StatusBadRequest, pageData{Title: "Contact", Form: form, Errors: errs})
+		return
+	}
+
+	msg := ContactMessage{
+		Name:     form["name"],
+		Email:    form["email"],
+		Phone:    form["phone"],
+		Interest: form["interest"],
+		Message:  form["message"],
+	}
+
+	if err := saveMessage(r.Context(), msg); err != nil {
+		log.Println("save message:", err)
+		http.Error(w, "could not save your message, please try again or use WhatsApp", http.StatusInternalServerError)
+		return
+	}
+	
+	http.Redirect(w, r, "/contact?sent=1", http.StatusSeeOther) // 303: refresh won't resubmit
 }
