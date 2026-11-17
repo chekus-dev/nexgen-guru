@@ -1,0 +1,12 @@
+{{define "content"}}
+<h1>Blog</h1>
+
+{{range .Posts}}
+<article>
+  <h2><a href="/blog/{{.Slug}}">{{.Title}}</a></h2>
+  <p><time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "2 January 2006"}}</time></p>
+</article>
+{{else}}
+<p>No posts yet. Check back soon.</p>
+{{end}}
+{{end}}

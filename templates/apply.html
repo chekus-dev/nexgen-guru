@@ -1,0 +1,44 @@
+{{define "content"}}
+<h1>Apply / Register</h1>
+
+{{if .Sent}}
+<p role="status">Thank you! We have received your application and will contact you soon.</p>
+{{end}}
+
+<form method="post" action="/apply">
+  <p>
+    <label for="name">Full name</label><br>
+    <input id="name" name="name" type="text" maxlength="100" required value="{{.Form.name}}">
+    {{with .Errors.name}}<br><span class="error">{{.}}</span>{{end}}
+  </p>
+
+  <p>
+    <label for="phone">Phone / WhatsApp</label><br>
+    <input id="phone" name="phone" type="tel" required placeholder="0806 000 0000" value="{{.Form.phone}}">
+    {{with .Errors.phone}}<br><span class="error">{{.}}</span>{{end}}
+  </p>
+
+  <p>
+    <label for="age">Age</label><br>
+    <input id="age" name="age" type="number" min="5" max="100" required value="{{.Form.age}}">
+    {{with .Errors.age}}<br><span class="error">{{.}}</span>{{end}}
+  </p>
+
+  <p>
+    <label for="course">Course</label><br>
+    <select id="course" name="course" required>
+      <option value="">Choose a course</option>
+      {{range .Courses}}<option value="{{.Title}}" {{if eq .Title $.Form.course}}selected{{end}}>{{.Title}}</option>{{end}}
+    </select>
+    {{with .Errors.course}}<br><span class="error">{{.}}</span>{{end}}
+  </p>
+
+  <p>
+    <label for="location">Location</label><br>
+    <input id="location" name="location" type="text" maxlength="100" required value="{{.Form.location}}">
+    {{with .Errors.location}}<br><span class="error">{{.}}</span>{{end}}
+  </p>
+
+  <button type="submit">Submit application</button>
+</form>
+{{end}}

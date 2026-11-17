@@ -1,0 +1,51 @@
+{{define "layout"}}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{.Title}} | {{.Site.Company}}</title>
+  <meta name="description" content="{{.Site.Tagline}}">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header>
+    <a href="/" class="brand">{{.Site.Company}}</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about">About</a>
+      <a href="/courses">Courses</a>
+      <a href="/for-schools">For Schools</a>
+      <a href="/apply">Apply</a>
+      <a href="/testimonials">Testimonials</a>
+      <a href="/blog">Blog</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    {{template "content" .}}
+  </main>
+
+  <footer>
+    <p><strong>{{.Site.Company}}</strong><br>{{.Site.Tagline}}</p>
+    <p>{{.Site.Slogan}}</p>
+
+    <address>
+      {{.Site.Address}}<br>
+      Phone / WhatsApp: <a href="tel:+{{.Site.WhatsApp}}">{{.Site.Phone}}</a><br>
+      Email: <a href="mailto:{{.Site.Email}}">{{.Site.Email}}</a>
+    </address>
+
+    {{with .Site.ActiveSocials}}
+    <p>Find us online:</p>
+    <ul class="socials">
+      {{range .}}<li><a href="{{.URL}}" target="_blank" rel="noopener">{{.Name}}</a></li>{{end}}
+    </ul>
+    {{end}}
+
+    <p>&copy; {{.Site.Company}}</p>
+  </footer>
+
+  <a class="wa-float" href="{{.Site.WhatsAppLink}}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">WhatsApp</a>
+</body>
+</html>{{end}}

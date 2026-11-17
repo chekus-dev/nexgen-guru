@@ -1,0 +1,15 @@
+{{define "content"}}
+<h1>What Our Students Say</h1>
+
+{{if .Site.Testimonials}}
+  {{range .Site.Testimonials}}
+  <blockquote>
+    <p>{{.Quote}}</p>
+    <footer>{{.Name}}, {{.Course}}</footer>
+  </blockquote>
+  {{end}}
+{{else}}
+  <p>Student stories are coming soon.</p>
+  <p class="actions"><a class="btn" href="/apply">Join our next programme</a></p>
+{{end}}
+{{end}}

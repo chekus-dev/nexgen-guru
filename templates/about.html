@@ -1,0 +1,27 @@
+{{define "content"}}
+<h1>About Us</h1>
+
+<section>
+  <h2>Who We Are</h2>
+  <p>{{.Site.Who}}</p>
+</section>
+
+<section>
+  <h2>Our Vision</h2>
+  <p>{{.Site.Vision}}</p>
+</section>
+
+<section>
+  <h2>Our Mission</h2>
+  <p>{{.Site.Mission}}</p>
+</section>
+
+<section>
+  <h2>Why Choose Us</h2>
+  <ul class="ticks">
+    {{range .Site.WhyUs}}<li>{{.}}</li>{{end}}
+  </ul>
+</section>
+
+<p class="actions"><a class="btn" href="/apply">Apply now</a></p>
+{{end}}

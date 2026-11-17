@@ -1,0 +1,22 @@
+{{define "content"}}
+<h1>Our Courses</h1>
+<p>Practical, project-based training. Pricing is shared on enquiry.</p>
+
+<section class="course-grid">
+  {{range .Courses}}
+  <article>
+    <h2>{{.Num}}. {{.Title}}</h2>
+    <p><a class="price-link" href="{{.EnquireURL}}">{{$.Site.PriceLabel}}</a></p>
+  </article>
+  {{end}}
+</section>
+
+<section>
+  <h2>Ways to Learn</h2>
+  <ul class="chips">
+    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
+  </ul>
+</section>
+
+<p class="actions"><a class="btn" href="/apply">Apply / Register</a></p>
+{{end}}

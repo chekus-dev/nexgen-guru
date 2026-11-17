@@ -1,0 +1,51 @@
+{{define "content"}}
+<h1>Contact Us</h1>
+
+{{if .Sent}}
+<p role="status">Thank you! Your message has been sent. We will reply shortly.</p>
+{{end}}
+
+<div class="contact-grid">
+<section class="card">
+  <p>{{.Site.Address}}</p>
+  <p>Phone / WhatsApp: <a href="tel:+{{.Site.WhatsApp}}">{{.Site.Phone}}</a></p>
+  <p>Email: <a href="mailto:{{.Site.Email}}">{{.Site.Email}}</a></p>
+  <p><a class="btn" href="{{.Site.WhatsAppLink}}" target="_blank" rel="noopener">Message us on WhatsApp</a></p>
+</section>
+
+<form method="post" action="/contact">
+  <p>
+    <label for="name">Name</label><br>
+    <input id="name" name="name" type="text" maxlength="100" required>
+  </p>
+  <p>
+    <label for="email">Email</label><br>
+    <input id="email" name="email" type="email">
+  </p>
+  <p>
+    <label for="phone">Phone / WhatsApp</label><br>
+    <input id="phone" name="phone" type="tel">
+  </p>
+  <p>
+    <label for="interest">I am interested in</label><br>
+    <select id="interest" name="interest">
+      <option {{if eq .Form.interest "General enquiry"}}selected{{end}}>General enquiry</option>
+      {{range .Courses}}<option {{if eq .Title $.Form.interest}}selected{{end}}>{{.Title}}</option>{{end}}
+      <option {{if eq .Form.interest "School Partnership"}}selected{{end}}>School Partnership</option>
+    </select>
+  </p>
+  <p>
+    <label for="message">Message</label><br>
+    <textarea id="message" name="message" rows="5" maxlength="4000" required></textarea>
+  </p>
+  <button type="submit">Send message</button>
+</form>
+</div>
+
+{{if .Site.MapEmbedURL}}
+<section>
+  <h2>Find Us</h2>
+  <iframe src="{{.Site.MapEmbedURL}}" width="100%" height="350" style="border:0" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="Map to {{.Site.Company}}"></iframe>
+</section>
+{{end}}
+{{end}}

@@ -1,0 +1,8 @@
+{{define "content"}}
+<article>
+  <h1>{{.Post.Title}}</h1>
+  <p><time datetime="{{.Post.Date.Format "2006-01-02"}}">{{.Post.Date.Format "2 January 2006"}}</time></p>
+  <div>{{.Post.Body}}</div>
+</article>
+<p><a href="/blog">&larr; Back to blog</a></p>
+{{end}}

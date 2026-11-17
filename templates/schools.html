@@ -1,0 +1,21 @@
+{{define "content"}}
+<h1>For Schools</h1>
+<p>Bring practical AI, digital and creative skills to your students.</p>
+
+<section>
+  <h2>Programmes for Schools</h2>
+  <ul class="chips">
+    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
+  </ul>
+</section>
+
+<section>
+  <h2>Courses We Can Deliver</h2>
+  <ul class="ticks">
+    {{range .Courses}}<li>{{.Title}}</li>{{end}}
+  </ul>
+  <p class="price-note">{{.Site.PriceLabel}}</p>
+</section>
+
+<p class="actions"><a class="btn" href="/contact?interest=School+Partnership">Request a school partnership</a></p>
+{{end}}

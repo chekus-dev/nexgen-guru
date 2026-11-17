@@ -1,0 +1,48 @@
+{{define "content"}}
+<section class="hero">
+  <h1>{{.Site.Tagline}}</h1>
+  <p><strong>{{.Site.Slogan}}</strong></p>
+  <p>{{.Site.Who}}</p>
+  <p class="actions"><a class="btn" href="/courses">Explore Courses</a> <a class="btn btn-ghost" href="/apply">Apply Now</a></p>
+</section>
+
+<section>
+  <h2>Why Choose Us</h2>
+  <ul class="ticks">
+    {{range .Site.WhyUs}}<li>{{.}}</li>{{end}}
+  </ul>
+</section>
+
+<section>
+  <h2>Our 7 Courses</h2>
+  <ol class="course-list">
+    {{range .Courses}}
+    <li><span class="title">{{.Title}}</span> <a class="price-link" href="{{.EnquireURL}}">{{$.Site.PriceLabel}}</a></li>
+    {{end}}
+  </ol>
+</section>
+
+<section>
+  <h2>How We Deliver</h2>
+  <ul class="chips">
+    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
+  </ul>
+</section>
+
+{{if .Site.Testimonials}}
+<section>
+  <h2>What Our Students Say</h2>
+  {{range .Site.Testimonials}}
+  <blockquote>
+    <p>{{.Quote}}</p>
+    <footer>{{.Name}}, {{.Course}}</footer>
+  </blockquote>
+  {{end}}
+</section>
+{{end}}
+
+<section class="cta-band">
+  <h2>Ready to start?</h2>
+  <p class="actions"><a class="btn" href="/apply">Apply / Register</a> <a class="btn btn-ghost" href="/contact">Contact us</a></p>
+</section>
+{{end}}
