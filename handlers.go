@@ -29,15 +29,24 @@ type Post struct {
 
 var posts = []Post{} // add real posts here
 
+// Must match the <option> values in templates/apply.html exactly.
+var validCourses = []string{
+	"AI-Integrated Content Creation",
+	"Graphic Design & Digital Branding",
+	"Audio Editing & Sound Engineering",
+	"Digital & AI-Supported Music Production",
+	"Video Editing & Motion Graphics",
+	"Professional Subtitling & Captioning",
+	"Digital Entrepreneurship & Freelancing",
+}
+
 type pageData struct {
-	Title   string
-	Site    SiteInfo
-	Courses []Course
-	Posts   []Post
-	Post    *Post
-	Form    map[string]string
-	Errors  map[string]string
-	Sent    bool
+	Title  string
+	Posts  []Post
+	Post   *Post
+	Form   map[string]string
+	Errors map[string]string
+	Sent   bool
 }
 
 // ---------- templates ----------
@@ -57,8 +66,6 @@ func render(w http.ResponseWriter, name string, status int, d pageData) {
 		http.Error(w, "page not found", http.StatusInternalServerError)
 		return
 	}
-	d.Site = site
-	d.Courses = site.Courses
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(status)
 	if err := t.ExecuteTemplate(w, "layout", d); err != nil {
@@ -156,7 +163,7 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil || age < 5 || age > 100 {
 		errs["age"] = "Enter a valid age."
 	}
-	if !slices.Contains(courseTitles(), form["course"]) {
+	if !slices.Contains(validCourses, form["course"]) {
 		errs["course"] = "Choose a course from the list."
 	}
 	if form["location"] == "" || len(form["location"]) > 100 {
