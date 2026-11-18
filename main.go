@@ -28,6 +28,7 @@ func loadEnv() {
 		}
 	}
 }
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -41,21 +42,38 @@ func main() {
 	defer db.Close()
 
 	mux := http.NewServeMux()
+	
+	// --- Static Files ---
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
+	// --- Main Pages ---
 	mux.HandleFunc("GET /{$}", HomeHandler)
 	mux.Handle("GET /home", http.RedirectHandler("/", http.StatusMovedPermanently))
 	mux.HandleFunc("GET /about", AboutHandler)
 	mux.HandleFunc("GET /courses", CoursesHandler)
 	mux.HandleFunc("GET /for-schools", SchoolHandler)
+	
+	// --- Apply / Register ---
 	mux.HandleFunc("GET /apply", ApplyHandler)
 	mux.HandleFunc("POST /apply", ApplySubmitHandler)
 	mux.Handle("GET /register", http.RedirectHandler("/apply", http.StatusMovedPermanently))
+	
+	// --- Testimonials ---
 	mux.HandleFunc("GET /testimonials", TestimonialHandler)
+	mux.HandleFunc("POST /testimonials", SubmitTestimonialHandler) // <-- NEW POST ROUTE
+	
+	// --- Blog ---
 	mux.HandleFunc("GET /blog", BlogHandler)
 	mux.HandleFunc("GET /blog/{slug}", BlogPostHandler)
+	
+	// --- Contact ---
 	mux.HandleFunc("GET /contact", ContactHandler)
 	mux.HandleFunc("POST /contact", ContactSubmitHandler)
+	
+	// --- Subscribers ---
+	mux.HandleFunc("POST /subscribe", SubscribeHandler) // <-- NEW POST ROUTE
+	
+	// --- Health Check ---
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })
 
 	srv := &http.Server{

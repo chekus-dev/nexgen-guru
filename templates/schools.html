@@ -1,21 +1,21 @@
-{{define "content"}}
-<h1>For Schools</h1>
-<p>Bring practical AI, digital and creative skills to your students.</p>
-
-<section>
-  <h2>Programmes for Schools</h2>
-  <ul class="chips">
-    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
-  </ul>
+{{ define "content" }}
+<section class="bg-brand-dark text-white py-20 min-h-[70vh]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-6">Programs For Schools</h1>
+        <p class="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">Flexible delivery options designed to fit your school's schedule and infrastructure.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
+            {{ range .Site.Delivery }}
+            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-brand-primary transition-colors text-left">
+                <h3 class="font-bold text-xl mb-2 text-white">{{ .Title }}</h3>
+                <p class="text-sm text-gray-400">{{ .Blurb }}</p>
+            </div>
+            {{ end }}
+        </div>
+        <div class="mt-16">
+            <a href="/contact?interest=School%20Program" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-brand-primary hover:bg-indigo-700 transition-colors shadow-xl">
+                Partner With Us
+            </a>
+        </div>
+    </div>
 </section>
-
-<section>
-  <h2>Courses We Can Deliver</h2>
-  <ul class="ticks">
-    {{range .Courses}}<li>{{.Title}}</li>{{end}}
-  </ul>
-  <p class="price-note">{{.Site.PriceLabel}}</p>
-</section>
-
-<p class="actions"><a class="btn" href="/contact?interest=School+Partnership">Request a school partnership</a></p>
-{{end}}
+{{ end }}

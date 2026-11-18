@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bytes" // <--- ADDED THIS
+	"bytes"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,6 +16,7 @@ import (
 
 type Application struct {
 	Name     string    `json:"name"`
+	Email    string    `json:"email"`
 	Phone    string    `json:"phone"`
 	Age      int       `json:"age"`
 	Course   string    `json:"course"`
@@ -28,7 +29,7 @@ type Post struct {
 	Date              time.Time
 }
 
-var posts = []Post{} // add real posts here
+var posts = []Post{}
 
 type pageData struct {
 	Title   string
@@ -45,14 +46,12 @@ type pageData struct {
 
 var pages = map[string]*template.Template{}
 
-// Parse once at startup, not on every request.
 func loadPages() {
 	for _, n := range []string{"home", "about", "courses", "schools", "apply", "testimonials", "blog", "post", "contact"} {
 		pages[n] = template.Must(template.ParseFiles("templates/layout.html", "templates/"+n+".html"))
 	}
 }
 
-// UPDATED render function to catch template errors
 func render(w http.ResponseWriter, name string, status int, d pageData) {
 	t, ok := pages[name]
 	if !ok {
@@ -62,7 +61,6 @@ func render(w http.ResponseWriter, name string, status int, d pageData) {
 	d.Site = site
 	d.Courses = site.Courses
 	
-	// Use a buffer to catch template execution errors before sending headers
 	var buf bytes.Buffer
 	if err := t.ExecuteTemplate(&buf, "layout", d); err != nil {
 		log.Println("render error:", err)
@@ -89,8 +87,24 @@ func CoursesHandler(w http.ResponseWriter, r *http.Request) {
 func SchoolHandler(w http.ResponseWriter, r *http.Request) {
 	render(w, "schools", http.StatusOK, pageData{Title: "For Schools"})
 }
+
+// UPDATED: TestimonialHandler now fetches testimonials from the database
 func TestimonialHandler(w http.ResponseWriter, r *http.Request) {
-	render(w, "testimonials", http.StatusOK, pageData{Title: "Testimonials"})
+	testimonials, err := getTestimonials(r.Context())
+	if err != nil {
+		log.Println("fetch testimonials:", err)
+		testimonials = []Testimonial{} // Fallback to empty slice if error
+	}
+	
+	// Create a copy of site info and override the testimonials
+	siteCopy := site
+	siteCopy.Testimonials = testimonials
+	
+	render(w, "testimonials", http.StatusOK, pageData{
+		Title: "Testimonials",
+		Site:  siteCopy,
+		Sent:  r.URL.Query().Get("submitted") == "1",
+	})
 }
 
 func ContactHandler(w http.ResponseWriter, r *http.Request) {
@@ -128,7 +142,6 @@ func ApplyHandler(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// 0806..., 0706..., or +234806...  (Nigerian mobile)
 var phoneRe = regexp.MustCompile(`^(0|\+234)[789][01]\d{8}$`)
 
 func normalizePhone(s string) (string, bool) {
@@ -149,8 +162,9 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// ✅ FIX 1: Added "email" to the list of parsed fields
 	form := map[string]string{}
-	for _, k := range []string{"name", "phone", "age", "course", "location"} {
+	for _, k := range []string{"name", "email", "phone", "age", "course", "location"} {
 		form[k] = strings.TrimSpace(r.PostFormValue(k))
 	}
 
@@ -158,6 +172,12 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if form["name"] == "" || len(form["name"]) > 100 {
 		errs["name"] = "Enter your full name."
 	}
+	
+	// ✅ FIX 2: Added email validation
+	if form["email"] != "" && (!strings.Contains(form["email"], "@") || len(form["email"]) > 150) {
+		errs["email"] = "Enter a valid email address."
+	}
+	
 	phone, ok := normalizePhone(form["phone"])
 	if !ok {
 		errs["phone"] = "Enter a valid Nigerian phone number."
@@ -178,13 +198,23 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	app := Application{form["name"], phone, age, form["course"], form["location"], time.Now()}
+	// ✅ FIX 3: Use named fields to include Email and avoid positional errors
+	app := Application{
+		Name:     form["name"],
+		Email:    form["email"],
+		Phone:    phone,
+		Age:      age,
+		Course:   form["course"],
+		Location: form["location"],
+		Received: time.Now(),
+	}
+	
 	if err := saveApplication(r.Context(), app); err != nil {
 		log.Println("save application:", err)
 		http.Error(w, "could not save, please try again or use WhatsApp", http.StatusInternalServerError)
 		return
 	}
-	http.Redirect(w, r, "/apply?sent=1", http.StatusSeeOther) // 303: refresh won't resubmit
+	http.Redirect(w, r, "/apply?sent=1", http.StatusSeeOther)
 }
 
 // ---------- contact ----------
@@ -208,7 +238,6 @@ func ContactSubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if form["message"] == "" {
 		errs["message"] = "Please enter a message."
 	}
-	// If they provided a phone number, make sure it's valid
 	if form["phone"] != "" {
 		phone, ok := normalizePhone(form["phone"])
 		if !ok {
@@ -217,7 +246,6 @@ func ContactSubmitHandler(w http.ResponseWriter, r *http.Request) {
 			form["phone"] = phone
 		}
 	}
-	// If they provided an email, do a basic length check
 	if form["email"] != "" && len(form["email"]) > 150 {
 		errs["email"] = "Email address is too long."
 	}
@@ -241,5 +269,74 @@ func ContactSubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	http.Redirect(w, r, "/contact?sent=1", http.StatusSeeOther) // 303: refresh won't resubmit
+	http.Redirect(w, r, "/contact?sent=1", http.StatusSeeOther)
+}
+
+// ---------- SUBSCRIBERS ----------
+
+func SubscribeHandler(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 1<<16)
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	email := strings.TrimSpace(r.PostFormValue("email"))
+	
+	// Basic validation
+	if email == "" || !strings.Contains(email, "@") || len(email) > 150 {
+		http.Error(w, "Please provide a valid email address.", http.StatusBadRequest)
+		return
+	}
+
+	if err := saveSubscriber(r.Context(), email); err != nil {
+		log.Println("save subscriber:", err)
+		http.Error(w, "Could not subscribe right now. Please try again later.", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/?subscribed=1", http.StatusSeeOther)
+}
+
+// ---------- TESTIMONIALS ----------
+
+func SubmitTestimonialHandler(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, 1<<16)
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+		return
+	}
+
+	name := strings.TrimSpace(r.PostFormValue("name"))
+	email := strings.TrimSpace(r.PostFormValue("email")) // ✅ FIX: Added email
+	course := strings.TrimSpace(r.PostFormValue("course"))
+	quote := strings.TrimSpace(r.PostFormValue("quote"))
+	rating, _ := strconv.Atoi(r.PostFormValue("rating"))
+
+	if name == "" || quote == "" || rating < 1 || rating > 5 {
+		http.Error(w, "Please fill all required fields correctly.", http.StatusBadRequest)
+		return
+	}
+
+	// Optional email validation
+	if email != "" && (!strings.Contains(email, "@") || len(email) > 150) {
+		http.Error(w, "Please provide a valid email address.", http.StatusBadRequest)
+		return
+	}
+
+	t := Testimonial{
+		Name:   name,
+		Email:  email, // ✅ FIX: Added email
+		Course: course,
+		Quote:  quote,
+		Rating: rating,
+	}
+
+	if err := saveTestimonial(r.Context(), t); err != nil {
+		log.Println("save testimonial:", err)
+		http.Error(w, "Could not save testimonial. Please try again.", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/testimonials?submitted=1", http.StatusSeeOther)
 }

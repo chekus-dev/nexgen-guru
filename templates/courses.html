@@ -1,22 +1,20 @@
-{{define "content"}}
-<h1>Our Courses</h1>
-<p>Practical, project-based training. Pricing is shared on enquiry.</p>
-
-<section class="course-grid">
-  {{range .Courses}}
-  <article>
-    <h2>{{.Num}}. {{.Title}}</h2>
-    <p><a class="price-link" href="{{.EnquireURL}}">{{$.Site.PriceLabel}}</a></p>
-  </article>
-  {{end}}
+{{ define "content" }}
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+    <div class="text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Our Core Courses</h1>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">Practical, hands-on training designed to make you job-ready and freelance-ready.</p>
+        <p class="text-brand-primary font-bold mt-2">{{ .Site.PriceLabel }}</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {{ range .Site.Courses }}
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group flex flex-col">
+            <div class="text-brand-secondary font-bold text-sm mb-2">Course {{ .Num }}</div>
+            <h2 class="text-xl font-bold text-gray-900 mb-4 flex-grow">{{ .Title }}</h2>
+            <a href="{{ .EnquireURL }}" class="inline-flex items-center justify-center w-full py-3 rounded-xl bg-indigo-50 text-brand-primary font-bold hover:bg-brand-primary hover:text-white transition-colors mt-auto">
+                Enquire Now &rarr;
+            </a>
+        </div>
+        {{ end }}
+    </div>
 </section>
-
-<section>
-  <h2>Ways to Learn</h2>
-  <ul class="chips">
-    {{range .Site.Delivery}}<li>{{.Title}}</li>{{end}}
-  </ul>
-</section>
-
-<p class="actions"><a class="btn" href="/apply">Apply / Register</a></p>
-{{end}}
+{{ end }}
