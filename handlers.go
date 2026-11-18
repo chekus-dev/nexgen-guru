@@ -52,13 +52,20 @@ func loadPages() {
 	}
 }
 
+// ✅ FIXED: render now preserves custom Site data if it was set before calling render
 func render(w http.ResponseWriter, name string, status int, d pageData) {
 	t, ok := pages[name]
 	if !ok {
 		http.Error(w, "page not found", http.StatusInternalServerError)
 		return
 	}
-	d.Site = site
+	
+	// Only override Site if it's empty (preserves custom overrides like testimonials)
+	if d.Site.Company == "" {
+		d.Site = site
+	}
+	
+	// Always set Courses
 	d.Courses = site.Courses
 	
 	var buf bytes.Buffer
@@ -162,7 +169,6 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ✅ FIX 1: Added "email" to the list of parsed fields
 	form := map[string]string{}
 	for _, k := range []string{"name", "email", "phone", "age", "course", "location"} {
 		form[k] = strings.TrimSpace(r.PostFormValue(k))
@@ -172,12 +178,9 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 	if form["name"] == "" || len(form["name"]) > 100 {
 		errs["name"] = "Enter your full name."
 	}
-	
-	// ✅ FIX 2: Added email validation
 	if form["email"] != "" && (!strings.Contains(form["email"], "@") || len(form["email"]) > 150) {
 		errs["email"] = "Enter a valid email address."
 	}
-	
 	phone, ok := normalizePhone(form["phone"])
 	if !ok {
 		errs["phone"] = "Enter a valid Nigerian phone number."
@@ -198,7 +201,6 @@ func ApplySubmitHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// ✅ FIX 3: Use named fields to include Email and avoid positional errors
 	app := Application{
 		Name:     form["name"],
 		Email:    form["email"],
@@ -283,7 +285,6 @@ func SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 
 	email := strings.TrimSpace(r.PostFormValue("email"))
 	
-	// Basic validation
 	if email == "" || !strings.Contains(email, "@") || len(email) > 150 {
 		http.Error(w, "Please provide a valid email address.", http.StatusBadRequest)
 		return
@@ -308,7 +309,7 @@ func SubmitTestimonialHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	name := strings.TrimSpace(r.PostFormValue("name"))
-	email := strings.TrimSpace(r.PostFormValue("email")) // ✅ FIX: Added email
+	email := strings.TrimSpace(r.PostFormValue("email"))
 	course := strings.TrimSpace(r.PostFormValue("course"))
 	quote := strings.TrimSpace(r.PostFormValue("quote"))
 	rating, _ := strconv.Atoi(r.PostFormValue("rating"))
@@ -318,7 +319,6 @@ func SubmitTestimonialHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Optional email validation
 	if email != "" && (!strings.Contains(email, "@") || len(email) > 150) {
 		http.Error(w, "Please provide a valid email address.", http.StatusBadRequest)
 		return
@@ -326,7 +326,7 @@ func SubmitTestimonialHandler(w http.ResponseWriter, r *http.Request) {
 
 	t := Testimonial{
 		Name:   name,
-		Email:  email, // ✅ FIX: Added email
+		Email:  email,
 		Course: course,
 		Quote:  quote,
 		Rating: rating,
