@@ -36,6 +36,8 @@ func main() {
 	}
 
 	loadPages()
+	loadAdminPages() // <-- Load admin templates
+
 	if err := connectDB(); err != nil {
 		log.Fatal("database: ", err)
 	}
@@ -60,7 +62,7 @@ func main() {
 	
 	// --- Testimonials ---
 	mux.HandleFunc("GET /testimonials", TestimonialHandler)
-	mux.HandleFunc("POST /testimonials", SubmitTestimonialHandler) // <-- NEW POST ROUTE
+	mux.HandleFunc("POST /testimonials", SubmitTestimonialHandler)
 	
 	// --- Blog ---
 	mux.HandleFunc("GET /blog", BlogHandler)
@@ -71,7 +73,19 @@ func main() {
 	mux.HandleFunc("POST /contact", ContactSubmitHandler)
 	
 	// --- Subscribers ---
-	mux.HandleFunc("POST /subscribe", SubscribeHandler) // <-- NEW POST ROUTE
+	mux.HandleFunc("POST /subscribe", SubscribeHandler)
+	
+	// --- ADMIN PORTAL ---
+	mux.HandleFunc("GET /admin/login", AdminLoginHandler)
+	mux.HandleFunc("POST /admin/login", AdminLoginSubmitHandler)
+	mux.HandleFunc("GET /admin/logout", AdminLogoutHandler)
+	
+	mux.HandleFunc("GET /admin", AdminDashboardHandler)
+	mux.HandleFunc("GET /admin/applications", AdminApplicationsHandler)
+	mux.HandleFunc("GET /admin/messages", AdminMessagesHandler)
+	mux.HandleFunc("GET /admin/subscribers", AdminSubscribersHandler)
+	mux.HandleFunc("GET /admin/testimonials", AdminTestimonialsHandler)
+	mux.HandleFunc("POST /admin/testimonials/toggle", AdminToggleTestimonialHandler)
 	
 	// --- Health Check ---
 	mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, r *http.Request) { w.Write([]byte("ok")) })

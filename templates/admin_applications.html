@@ -1,0 +1,45 @@
+{{ define "admin_content" }}
+<div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-900">Applications</h1>
+    <p class="text-gray-500 mt-1">All student course applications.</p>
+</div>
+
+{{ if .DBError }}
+<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 font-semibold">
+    {{ .DBError }}
+</div>
+{{ end }}
+
+<div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Email</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Phone</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Age</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Course</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Location</th>
+                    <th class="px-6 py-4 text-left font-bold text-gray-600 text-xs uppercase tracking-wider">Date</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {{ range .Applications }}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 font-semibold whitespace-nowrap text-gray-900">{{ .Name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ .Email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ .Phone }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ .Age }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ .Course }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-600">{{ .Location }}</td>
+                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">{{ .CreatedAt.Format "Jan 02, 2006" }}</td>
+                </tr>
+                {{ else }}
+                <tr><td colspan="7" class="px-6 py-12 text-center text-gray-500">No applications yet.</td></tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{ end }}
