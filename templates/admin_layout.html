@@ -2,8 +2,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | NexGen Guru</title>
@@ -27,6 +25,7 @@
         .sidebar-link.active { background: #4F46E5; color: white; }
         .stat-card { transition: all 0.25s ease; }
         .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .login-gradient { background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #0F172A 100%); }
     </style>
 </head>
 <body class="font-sans text-gray-800 bg-gray-50 min-h-screen">
@@ -38,7 +37,24 @@
     <aside class="w-72 bg-brand-dark text-white flex flex-col fixed h-full z-10">
         <div class="p-6 border-b border-white/10">
             <a href="/admin" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-teal-500 flex items-center justify-center text-white font-extrabold text-sm">NG</div>
+                <div class="relative w-10 h-10 flex items-center justify-center">
+                    <svg viewBox="0 0 100 100" class="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoGradAdmin" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4F46E5" />
+                                <stop offset="100%" stop-color="#0D9488" />
+                            </linearGradient>
+                            <linearGradient id="sparkGradAdmin" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#FFD700" />
+                                <stop offset="100%" stop-color="#F0C14B" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M50 2 L93 26 L93 74 L50 98 L7 74 L7 26 Z" fill="url(#logoGradAdmin)" />
+                        <path d="M30 65 V35 L50 55 V65" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <path d="M55 35 H65 A10 10 0 0 1 75 45 V50 A10 10 0 0 1 65 60 H58 A10 10 0 0 1 48 50" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        <path d="M75 25 L78 32 L85 35 L78 38 L75 45 L72 38 L65 35 L72 32 Z" fill="url(#sparkGradAdmin)" />
+                    </svg>
+                </div>
                 <div>
                     <div class="font-extrabold text-lg leading-none">NexGen Guru</div>
                     <div class="text-[10px] text-indigo-300 font-bold tracking-widest uppercase mt-1">Admin Panel</div>
@@ -88,37 +104,215 @@
 </div>
 
 {{ else }}
-<!-- Not Logged In: Centered Login -->
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-dark via-indigo-950 to-brand-dark px-4">
-    <div class="w-full max-w-md">
-        <div class="bg-white rounded-3xl shadow-2xl p-10">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-teal-500 rounded-2xl mx-auto flex items-center justify-center text-white font-extrabold text-2xl mb-4 shadow-lg shadow-indigo-500/30">NG</div>
-                <h1 class="text-2xl font-extrabold text-gray-900">Admin Portal</h1>
-                <p class="text-gray-500 text-sm mt-1">NexGen Guru Consulting</p>
+<!-- FANCY LOGIN PAGE -->
+<div class="min-h-screen flex login-gradient">
+    <!-- Left Side: Branding -->
+    <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-12 relative overflow-hidden">
+        <div class="absolute top-20 left-20 w-64 h-64 bg-indigo-600 rounded-full opacity-20 blur-3xl"></div>
+        <div class="absolute bottom-20 right-20 w-96 h-96 bg-teal-500 rounded-full opacity-10 blur-3xl"></div>
+        
+        <div class="relative z-10 text-center">
+            <div class="w-32 h-32 mx-auto mb-8 relative flex items-center justify-center">
+                <div class="absolute inset-0 bg-indigo-500 rounded-full blur-2xl opacity-40"></div>
+                <svg viewBox="0 0 100 100" class="w-32 h-32 relative z-10" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradLogin" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4F46E5" />
+                            <stop offset="100%" stop-color="#0D9488" />
+                        </linearGradient>
+                        <linearGradient id="sparkGradLogin" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFD700" />
+                            <stop offset="100%" stop-color="#F0C14B" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 2 L93 26 L93 74 L50 98 L7 74 L7 26 Z" fill="url(#logoGradLogin)" />
+                    <path d="M30 65 V35 L50 55 V65" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M55 35 H65 A10 10 0 0 1 75 45 V50 A10 10 0 0 1 65 60 H58 A10 10 0 0 1 48 50" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M75 25 L78 32 L85 35 L78 38 L75 45 L72 38 L65 35 L72 32 Z" fill="url(#sparkGradLogin)" />
+                </svg>
             </div>
-
-            {{ if .Error }}
-            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm font-semibold">
-                {{ .Error }}
-            </div>
-            {{ end }}
-
-            <form action="/admin/login" method="POST" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-                    <input type="password" name="password" required autofocus
-                        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none transition-all">
-                </div>
-                <button type="submit" class="w-full py-4 rounded-xl text-base font-bold text-white bg-brand-primary hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
-                    Login
-                </button>
-            </form>
+            <h1 class="text-4xl font-extrabold text-white mb-3">NexGen Guru</h1>
+            <p class="text-indigo-200 text-lg font-medium">Admin Portal</p>
+            <p class="text-gray-400 text-sm mt-4 max-w-sm mx-auto">Manage applications, messages, subscribers, and testimonials from one central dashboard.</p>
         </div>
-        <p class="text-center text-gray-500 text-xs mt-6">© 2025 NexGen Guru Consulting. All rights reserved.</p>
+    </div>
+
+    <!-- Right Side: Login Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+        <div class="w-full max-w-md">
+            <div class="bg-white rounded-3xl shadow-2xl p-10">
+                <div class="lg:hidden text-center mb-8">
+                    <div class="w-16 h-16 mx-auto mb-4 relative flex items-center justify-center">
+                        <svg viewBox="0 0 100 100" class="w-16 h-16" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="logoGradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#4F46E5" />
+                                    <stop offset="100%" stop-color="#0D9488" />
+                                </linearGradient>
+                                <linearGradient id="sparkGradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#FFD700" />
+                                    <stop offset="100%" stop-color="#F0C14B" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M50 2 L93 26 L93 74 L50 98 L7 74 L7 26 Z" fill="url(#logoGradMobile)" />
+                            <path d="M30 65 V35 L50 55 V65" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <path d="M55 35 H65 A10 10 0 0 1 75 45 V50 A10 10 0 0 1 65 60 H58 A10 10 0 0 1 48 50" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                            <path d="M75 25 L78 32 L85 35 L78 38 L75 45 L72 38 L65 35 L72 32 Z" fill="url(#sparkGradMobile)" />
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl font-extrabold text-gray-900">Admin Portal</h1>
+                </div>
+
+                <div class="mb-8">
+                    <h2 class="text-2xl font-extrabold text-gray-900">Welcome back</h2>
+                    <p class="text-gray-500 text-sm mt-1">Enter your password to access the dashboard.</p>
+                </div>
+
+                {{ if .Error }}
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-6 text-sm font-semibold">
+                    {{ .Error }}
+                </div>
+                {{ end }}
+
+                <form action="/admin/login" method="POST" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+                        <input type="password" name="password" required autofocus
+                            class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-primary focus:border-brand-primary outline-none transition-all"
+                            placeholder="••••••••">
+                    </div>
+                    <button type="submit" class="w-full py-4 rounded-xl text-base font-bold text-white bg-brand-primary hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                        Login
+                    </button>
+                </form>
+            </div>
+            <p class="text-center text-gray-500 text-xs mt-6">© 2025 NexGen Guru Consulting. All rights reserved.</p>
+        </div>
     </div>
 </div>
 {{ end }}
+
+<!-- ============================================ -->
+<!-- ADMIN PORTAL INTERACTIVITY (at end of body)  -->
+<!-- ============================================ -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    // 1. SIDEBAR ACTIVE LINK HIGHLIGHTING
+    const currentPath = window.location.pathname;
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPath || (currentPath === '/admin' && href === '/admin')) {
+            link.classList.add('active');
+        }
+    });
+
+    // 2. AUTO-DISMISS NOTIFICATIONS
+    document.querySelectorAll('.bg-green-50, .bg-red-50, .bg-yellow-50').forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            alert.style.opacity = '0';
+            alert.style.transform = 'translateY(-10px)';
+            setTimeout(() => alert.remove(), 500);
+        }, 5000);
+    });
+
+    // 3. CONFIRM DIALOGS FOR DESTRUCTIVE ACTIONS
+    document.querySelectorAll('form[action="/admin/testimonials/toggle"]').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            if (!confirm('Are you sure you want to toggle the visibility of this testimonial?')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // 4. ANIMATED NUMBER COUNTERS (Dashboard)
+    document.querySelectorAll('.stat-card .text-4xl').forEach(counter => {
+        const target = parseInt(counter.textContent, 10);
+        if (isNaN(target) || target === 0) return;
+        let current = 0;
+        const step = Math.ceil(target / 40);
+        const interval = setInterval(() => {
+            current += step;
+            if (current >= target) {
+                counter.textContent = target;
+                clearInterval(interval);
+            } else {
+                counter.textContent = current;
+            }
+        }, 30);
+    });
+
+    // 5. LIVE SEARCH FILTER FOR TABLES
+    document.querySelectorAll('table').forEach(table => {
+        const rows = table.querySelectorAll('tbody tr');
+        if (rows.length <= 3) return;
+
+        const searchWrapper = document.createElement('div');
+        searchWrapper.className = 'mb-4';
+        searchWrapper.innerHTML = `
+            <div class="relative">
+                <input type="text" placeholder="Search..." 
+                    class="w-full px-4 py-3 pl-10 rounded-xl border border-gray-200 focus:ring-2 focus:ring-brand-primary outline-none transition-all bg-white text-sm">
+                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+        `;
+        table.parentElement.parentElement.insertBefore(searchWrapper, table.parentElement);
+
+        searchWrapper.querySelector('input').addEventListener('input', function () {
+            const term = this.value.toLowerCase();
+            rows.forEach(row => {
+                row.style.display = row.textContent.toLowerCase().includes(term) ? '' : 'none';
+            });
+        });
+    });
+
+    // 6. COPY-TO-CLIPBOARD FOR EMAILS
+    document.querySelectorAll('td').forEach(cell => {
+        const text = cell.textContent.trim();
+        if (text.includes('@') && text.includes('.')) {
+            cell.style.cursor = 'pointer';
+            cell.title = 'Click to copy';
+            cell.addEventListener('click', function () {
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = cell.textContent;
+                    cell.textContent = '✓ Copied!';
+                    cell.classList.add('text-green-600', 'font-bold');
+                    setTimeout(() => {
+                        cell.textContent = original;
+                        cell.classList.remove('text-green-600', 'font-bold');
+                    }, 1500);
+                });
+            });
+        }
+    });
+
+    // 7. SMOOTH PAGE TRANSITIONS
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s ease';
+    setTimeout(() => document.body.style.opacity = '1', 50);
+
+    // 8. TOGGLE BUTTON FEEDBACK
+    document.querySelectorAll('button[type="submit"]').forEach(btn => {
+        btn.addEventListener('click', function () {
+            if (this.form && this.form.action.includes('toggle')) {
+                this.textContent = 'Updating...';
+                this.disabled = true;
+            }
+        });
+    });
+
+    // 9. SHOW CURRENT DATE
+    const now = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.querySelectorAll('.current-date').forEach(el => {
+        el.textContent = now.toLocaleDateString('en-US', options);
+    });
+
+});
+</script>
 
 </body>
 </html>
