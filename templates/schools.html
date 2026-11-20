@@ -1,19 +1,186 @@
 {{ define "content" }}
-<section class="bg-brand-dark text-white py-20 min-h-[70vh]">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-3xl md:text-5xl font-extrabold mb-6">Programs For Schools</h1>
-        <p class="text-gray-400 max-w-2xl mx-auto mb-16 text-lg">Flexible delivery options designed to fit your school's schedule and infrastructure.</p>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {{ range .Site.Delivery }}
-            <div class="bg-gray-800 p-8 rounded-2xl border border-gray-700 hover:border-brand-primary transition-colors text-left">
-                <h3 class="font-bold text-xl mb-2 text-white">{{ .Title }}</h3>
-                <p class="text-sm text-gray-400">{{ .Blurb }}</p>
-            </div>
-            {{ end }}
+<!-- Hero Section -->
+<section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 py-24 lg:py-32">
+    <!-- Decorative blobs -->
+    <div class="absolute top-0 left-0 w-96 h-96 bg-indigo-500 rounded-full opacity-10 blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-teal-500 rounded-full opacity-10 blur-3xl translate-x-1/2 translate-y-1/2"></div>
+    <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-purple-500 rounded-full opacity-10 blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold text-xs px-4 py-2 rounded-full mb-6">
+            <span class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></span>
+            For Schools & Institutions
         </div>
-        <div class="mt-16">
-            <a href="/contact?interest=School%20Program" class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-bold rounded-full text-white bg-brand-primary hover:bg-indigo-700 transition-colors shadow-xl">
+        
+        <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white mb-6">
+            Bring <span class="relative inline-block">
+                <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-teal-400 bg-clip-text text-transparent">AI & Tech</span>
+                <svg class="absolute -bottom-2 left-0 w-full" viewBox="0 0 250 12" fill="none"><path d="M2 10C60 2 150 2 248 10" stroke="url(#schoolsUnderline)" stroke-width="3" stroke-linecap="round"/><defs><linearGradient id="schoolsUnderline" x1="0" y1="0" x2="250" y2="0" gradientUnits="userSpaceOnUse"><stop stop-color="#818CF8"/><stop offset="1" stop-color="#2DD4BF"/></linearGradient></defs></svg>
+            </span> To Your School
+        </h1>
+        
+        <p class="text-gray-400 max-w-3xl mx-auto mb-12 text-lg leading-relaxed">
+            Flexible delivery options designed to fit your school's schedule, infrastructure, and budget. We bring the tools, the trainers, and the curriculum.
+        </p>
+
+        <div class="flex flex-wrap justify-center gap-4">
+            <a href="/contact?interest=School%20Program" class="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-full text-gray-900 bg-gradient-to-r from-teal-400 to-teal-300 hover:from-teal-300 hover:to-teal-200 transition-all shadow-2xl shadow-teal-500/30 hover:-translate-y-1">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 Partner With Us
+            </a>
+            <a href="/courses" class="inline-flex items-center gap-2 px-8 py-4 text-base font-bold rounded-full text-white border-2 border-white/20 hover:bg-white/10 transition-all">
+                View Courses
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Delivery Options -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="text-center mb-16">
+        <div class="inline-block bg-indigo-50 text-indigo-600 font-bold text-xs px-4 py-2 rounded-full mb-4">5 Delivery Modes</div>
+        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">How We Deliver</h2>
+        <p class="text-gray-500 max-w-2xl mx-auto text-lg">Choose the delivery mode that works best for your school's needs.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {{ range $i, $mode := .Site.Delivery }}
+        
+        {{ if eq $i 0 }}
+        <!-- School Clubs (Indigo) -->
+        <div class="group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-indigo-50 rounded-full -mr-20 -mt-20 group-hover:bg-indigo-100 transition-colors"></div>
+            <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg shadow-indigo-200 group-hover:scale-110 transition-transform text-3xl">🏫</div>
+                <div class="text-xs font-bold text-indigo-600 mb-2 tracking-widest">MODE 01</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $mode.Title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $mode.Blurb }}</p>
+            </div>
+        </div>
+
+        {{ else if eq $i 1 }}
+        <!-- Term Programme (Teal) -->
+        <div class="group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-teal-50 rounded-full -mr-20 -mt-20 group-hover:bg-teal-100 transition-colors"></div>
+            <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 flex items-center justify-center mb-6 shadow-lg shadow-teal-200 group-hover:scale-110 transition-transform text-3xl">📚</div>
+                <div class="text-xs font-bold text-teal-600 mb-2 tracking-widest">MODE 02</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $mode.Title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $mode.Blurb }}</p>
+            </div>
+        </div>
+
+        {{ else if eq $i 2 }}
+        <!-- Holiday Boot Camp (Purple) -->
+        <div class="group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-purple-50 rounded-full -mr-20 -mt-20 group-hover:bg-purple-100 transition-colors"></div>
+            <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-6 shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform text-3xl">🚀</div>
+                <div class="text-xs font-bold text-purple-600 mb-2 tracking-widest">MODE 03</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $mode.Title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $mode.Blurb }}</p>
+            </div>
+        </div>
+
+        {{ else if eq $i 3 }}
+        <!-- School Digital Academy (Highlighted Gradient) -->
+        <div class="group bg-gradient-to-br from-indigo-600 to-purple-700 p-8 rounded-3xl shadow-2xl shadow-indigo-300 text-white hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -mr-20 -mt-20"></div>
+            <div class="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-16 -mb-16"></div>
+            <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6 group-hover:scale-110 transition-transform text-3xl">🎓</div>
+                <div class="text-xs font-bold text-indigo-200 mb-2 tracking-widest">MODE 04 · PREMIUM</div>
+                <h3 class="text-xl font-bold mb-3">{{ $mode.Title }}</h3>
+                <p class="text-indigo-100 text-sm leading-relaxed">{{ $mode.Blurb }}</p>
+            </div>
+        </div>
+
+        {{ else }}
+        <!-- Online (Pink) -->
+        <div class="group bg-white p-8 rounded-3xl shadow-sm border border-gray-100 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-40 h-40 bg-pink-50 rounded-full -mr-20 -mt-20 group-hover:bg-pink-100 transition-colors"></div>
+            <div class="relative">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center mb-6 shadow-lg shadow-pink-200 group-hover:scale-110 transition-transform text-3xl">🌐</div>
+                <div class="text-xs font-bold text-pink-600 mb-2 tracking-widest">MODE 05</div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">{{ $mode.Title }}</h3>
+                <p class="text-gray-500 text-sm leading-relaxed">{{ $mode.Blurb }}</p>
+            </div>
+        </div>
+        {{ end }}
+        
+        {{ end }}
+    </div>
+</section>
+
+<!-- Why Partner With Us -->
+<section class="bg-white border-y border-gray-100 py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <div class="inline-block bg-teal-50 text-teal-600 font-bold text-xs px-4 py-2 rounded-full mb-4">Benefits</div>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Why Partner With Us?</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto text-lg">We make it easy for your school to offer world-class tech education.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="group bg-gradient-to-br from-indigo-50 to-white p-8 rounded-3xl border border-indigo-100 hover:shadow-xl transition-shadow">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center mb-6 text-white shadow-lg shadow-indigo-200 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 mb-3">Trained Instructors</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Our team of expert trainers come directly to your campus, ready to teach.</p>
+            </div>
+
+            <div class="group bg-gradient-to-br from-teal-50 to-white p-8 rounded-3xl border border-teal-100 hover:shadow-xl transition-shadow">
+                <div class="w-14 h-14 rounded-2xl bg-teal-600 flex items-center justify-center mb-6 text-white shadow-lg shadow-teal-200 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 mb-3">Custom Curriculum</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">We tailor the program to match your school's academic calendar and goals.</p>
+            </div>
+
+            <div class="group bg-gradient-to-br from-purple-50 to-white p-8 rounded-3xl border border-purple-100 hover:shadow-xl transition-shadow">
+                <div class="w-14 h-14 rounded-2xl bg-purple-600 flex items-center justify-center mb-6 text-white shadow-lg shadow-purple-200 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 mb-3">Certified Outcomes</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Every student walks away with a portfolio and certificate they can show off.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <div class="bg-gradient-to-br from-indigo-50 to-teal-50 rounded-[3rem] p-12 lg:p-16">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div>
+                <div class="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-teal-500 bg-clip-text text-transparent mb-2">5</div>
+                <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Delivery Modes</div>
+            </div>
+            <div>
+                <div class="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-teal-500 bg-clip-text text-transparent mb-2">7</div>
+                <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Core Courses</div>
+            </div>
+            <div>
+                <div class="text-5xl font-extrabold bg-gradient-to-r from-indigo-600 to-teal-500 bg-clip-text text-transparent mb-2">100%</div>
+                <div class="text-sm font-bold text-gray-600 uppercase tracking-wider">Practical Learning</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+    <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-[3rem] p-12 lg:p-20 text-center relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32"></div>
+        <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
+        <div class="relative z-10">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Let's Bring This To Your School</h2>
+            <p class="text-indigo-100 max-w-xl mx-auto mb-8 text-lg">Schedule a call with us to discuss how we can partner with your school.</p>
+            <a href="/contact?interest=School%20Program" class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-indigo-600 font-bold rounded-full hover:bg-gray-100 transition-all shadow-xl hover:-translate-y-1">
+                Get in Touch
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
         </div>
     </div>

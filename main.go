@@ -30,13 +30,16 @@ func loadEnv() {
 }
 
 func main() {
+	// ✅ STEP 1: Load .env FIRST, before anything else
+	loadEnv()
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 	}
 
 	loadPages()
-	loadAdminPages() // <-- Load admin templates
+	loadAdminPages()
 
 	if err := connectDB(); err != nil {
 		log.Fatal("database: ", err)
