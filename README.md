@@ -17,7 +17,6 @@
 
 [![Website](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-4F46E5?style=for-the-badge)](https://nexgen-guru.onrender.com)
 [![Status](https://img.shields.io/badge/Status-Production_Ready-22C55E?style=for-the-badge)]()
-[![License](https://img.shields.io/badge/License-Proprietary-F0C14B?style=for-the-badge)]()
 
 <br>
 
@@ -117,35 +116,3 @@ This repository contains the **complete source code** for our website: a modern,
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
 
-📁 Project Structure
-
-nexgen-guru/
-│
-├── 🟦 main.go                 # Entry point, routing, server config
-├── 🟦 handlers.go             # HTTP handlers for all pages
-├── 🟦 db.go                   # Database connection and queries
-├── 🟦 content.go              # Site data (courses, testimonials, contact info)
-│
-├── 📂 migrations/             # SQL migration files
-│   ├── 000001_init_schema.up.sql
-│   ├── 000002_subscribers.up.sql
-│   └── 000003_testimonials.up.sql
-│
-├── 📂 static/
-│   └── 🎨 favicon.svg         # Custom hexagon icon
-│
-├── 📂 templates/              # HTML templates
-│   ├── 🖼️ layout.html         # Master wrapper (header, footer, nav)
-│   ├── 🏠 home.html           # Landing page
-│   ├── ℹ️ about.html          # Company info, vision, mission
-│   ├── 📚 courses.html        # All 7 courses
-│   ├── 🏫 schools.html        # Delivery methods for schools
-│   ├── 📝 apply.html          # Application form
-│   ├── ⭐ testimonials.html   # Testimonials + submission form
-│   ├── 📞 contact.html        # Contact info + form + map
-│   ├── 📰 blog.html           # Blog listing
-│   └── 📄 post.html           # Individual blog post
-│
-├── 🔒 .env                    # Environment variables (NOT in Git)
-├── 🚫 .gitignore
-└── 📖 README.md
