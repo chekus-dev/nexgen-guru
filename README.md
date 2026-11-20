@@ -15,7 +15,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com/)
 
-[![Website](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-4F46E5?style=for-the-badge)](https://nexgenguru.com)
+[![Website](https://img.shields.io/badge/🌐_Live_Site-Visit_Now-4F46E5?style=for-the-badge)](https://nexgen-guru.onrender.com)
 [![Status](https://img.shields.io/badge/Status-Production_Ready-22C55E?style=for-the-badge)]()
 [![License](https://img.shields.io/badge/License-Proprietary-F0C14B?style=for-the-badge)]()
 
